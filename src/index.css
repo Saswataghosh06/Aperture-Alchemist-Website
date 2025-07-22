@@ -1,0 +1,229 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Aperture Alchemist Design System - Photography & Cinematography Theme
+Brand Colors: Yellow, White, Black, Yellow Ochre, Orange
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Core Dark Theme - Cinematic Background */
+    --background: 220 15% 6%;
+    --foreground: 0 0% 95%;
+
+    /* Glassmorphism Cards */
+    --glass-background: 220 15% 12%;
+    --glass-border: 0 0% 35%;
+    --glass-hover: 220 15% 18%;
+
+    /* Brand Colors */
+    --brand-yellow: 45 100% 55%;
+    --brand-yellow-ochre: 40 85% 45%;
+    --brand-orange: 25 95% 60%;
+    --brand-white: 0 0% 100%;
+    --brand-black: 220 15% 8%;
+
+    /* Primary - Orange Gradient */
+    --primary: 25 95% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 25 95% 55%;
+    --primary-glow: 25 95% 40%;
+
+    /* Secondary - Yellow Accent */
+    --secondary: 45 100% 55%;
+    --secondary-foreground: 220 15% 6%;
+    --secondary-hover: 45 100% 50%;
+
+    /* Cards & Surfaces */
+    --card: 220 15% 12%;
+    --card-foreground: 0 0% 95%;
+    --card-border: 0 0% 25%;
+
+    /* Popover */
+    --popover: 220 15% 10%;
+    --popover-foreground: 0 0% 95%;
+
+    /* Muted Elements */
+    --muted: 220 15% 15%;
+    --muted-foreground: 0 0% 65%;
+
+    /* Accent */
+    --accent: 220 15% 18%;
+    --accent-foreground: 0 0% 95%;
+
+    /* Destructive */
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders & Inputs */
+    --border: 0 0% 25%;
+    --input: 220 15% 18%;
+    --ring: 25 95% 60%;
+
+    /* Radius */
+    --radius: 12px;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(25 95% 60%) 0%, hsl(45 100% 55%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(45 100% 55%) 0%, hsl(40 85% 45%) 100%);
+    --gradient-text: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(0 0% 65%) 100%);
+    --gradient-fade: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(0 0% 35%) 100%);
+    
+    /* Shadows & Glows */
+    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --shadow-glow: 0 0 40px hsl(var(--primary) / 0.3);
+    --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.5);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    background-image: 
+      radial-gradient(circle at 20% 80%, hsl(220 15% 8% / 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, hsl(25 95% 60% / 0.1) 0%, transparent 50%);
+    background-attachment: fixed;
+  }
+
+  /* Scrollbar Styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary/50 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary/70;
+  }
+}
+
+@layer components {
+  /* Glassmorphism Base Classes */
+  .glass-card {
+    @apply backdrop-blur-xl border border-white/20;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: var(--shadow-glass);
+  }
+
+  .glass-card-hover {
+    @apply glass-card transition-all duration-300 hover:bg-white/10 hover:border-white/30;
+    box-shadow: var(--shadow-glass);
+  }
+
+  .glass-card-hover:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+  }
+
+  /* Gradient Text Effects */
+  .gradient-text {
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-fade {
+    background: var(--gradient-fade);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-primary-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Button Variants */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary-hover px-6 py-3 rounded-full font-medium transition-all duration-300;
+    box-shadow: 0 4px 20px hsl(var(--primary) / 0.3);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 6px 30px hsl(var(--primary) / 0.5);
+    transform: translateY(-2px);
+  }
+
+  .btn-glass {
+    @apply glass-card-hover text-white px-6 py-3 rounded-full font-medium;
+  }
+
+  /* Animation Classes */
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  .parallax-slow {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes glow {
+  0% { 
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
+  }
+  100% { 
+    box-shadow: 0 0 40px hsl(var(--primary) / 0.6);
+  }
+}
+
+/* Parallax and Scroll Animations */
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
+/* Video Overlay Effects */
+.video-overlay {
+  position: relative;
+}
+
+.video-overlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, 
+    hsl(220 15% 6% / 0.7) 0%, 
+    hsl(25 95% 60% / 0.1) 50%, 
+    hsl(220 15% 6% / 0.7) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
