@@ -15,9 +15,14 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
   subtitle,
   images,
   className,
-  delay = 0
+  delay = 0,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+
+  const fallbackImage =
+    'https://via.placeholder.com/600x400.png?text=No+Image';
+
+  const validImages = images?.filter(Boolean) ?? [];
 
   return (
     <motion.div
@@ -35,22 +40,22 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
     >
       {/* Main Image */}
       <div className="relative w-full h-full overflow-hidden">
-        <img 
-          src={images[0]} 
+        <img
+          src={validImages[0] || fallbackImage}
           alt={title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
 
-        {/* Hover Images Grid */}
+        {/* Hover Grid */}
         <AnimatePresence>
-          {isHovered && images.length > 1 && (
+          {isHovered && validImages.length > 1 && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="absolute inset-0 grid grid-cols-2 gap-1 p-2"
             >
-              {images.slice(1, 5).map((img, index) => (
+              {validImages.slice(1, 5).map((img, index) => (
                 <motion.div
                   key={index}
                   initial={{ scale: 0, opacity: 0 }}
@@ -58,8 +63,8 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
                   transition={{ delay: index * 0.1, duration: 0.3 }}
                   className="rounded-lg overflow-hidden"
                 >
-                  <img 
-                    src={img} 
+                  <img
+                    src={img || fallbackImage}
                     alt={`${title} ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
@@ -69,7 +74,7 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
           )}
         </AnimatePresence>
 
-        {/* Content Overlay */}
+        {/* Title/Subtitle Overlay */}
         <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
           <motion.div
             initial={false}
@@ -82,11 +87,13 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
         </div>
 
         {/* Image Count Badge */}
-        <div className="absolute top-3 right-3">
-          <span className="glass-card px-3 py-1 text-xs font-medium text-white rounded-full">
-            {images.length} photos
-          </span>
-        </div>
+        {validImages.length > 0 && (
+          <div className="absolute top-3 right-3">
+            <span className="glass-card px-3 py-1 text-xs font-medium text-white rounded-full">
+              {validImages.length} photo{validImages.length > 1 ? 's' : ''}
+            </span>
+          </div>
+        )}
       </div>
     </motion.div>
   );

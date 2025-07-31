@@ -120,7 +120,7 @@ const Contact: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold text-white mb-2">Visit Us</h3>
-                    <p className="text-white/80">123 Creative Street<br />Los Angeles, CA 90210</p>
+                    <p className="text-white/80">47 Adarsha Nagar<br />Kolkata-700105</p>
                   </div>
                 </div>
               </GlassCard>
