@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Play } from 'lucide-react';
-import VideoModal from '@/components/ui/videoModal';
+import VideoModal from '@/components/ui/VideoModal';
 
 interface ProjectCardProps {
   title: string;
