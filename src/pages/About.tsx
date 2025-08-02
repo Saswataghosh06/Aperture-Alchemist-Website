@@ -34,7 +34,7 @@ const About: React.FC = () => {
 
   const timeline = [
     {
-      year: "2024",
+      year: "2023",
       title: "Founded as Creative Studio",
       description: "Started as a passionate group of creatives with a vision to revolutionize visual storytelling"
     },
@@ -99,7 +99,7 @@ const About: React.FC = () => {
               <p>
                 Aperture Alchemist was born from a simple belief: that every brand has a unique story 
                 waiting to be told through the magic of cinema. What started as a passionate group of 
-                creatives in 2024 has evolved into a full-service production house dedicated to 
+                creatives in 2023 has evolved into a full-service production house dedicated to 
                 transforming ideas into visual masterpieces.
               </p>
               <p>
@@ -127,24 +127,25 @@ const About: React.FC = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
             <StatCounter 
-              value={15}
+              value={2}
               suffix="+"
               label="Years of Experience"
               delay={0}
             />
             <StatCounter 
-              value={200}
+              value={10}
               suffix="+"
               label="Repeated Clients"
               delay={0.2}
             />
             <StatCounter 
-              value={478}
+              value={25}
+              suffix="+"
               label="Completed Projects"
               delay={0.4}
             />
             <StatCounter 
-              value={350}
+              value={11}
               suffix="+"
               label="Happy Clients"
               delay={0.6}

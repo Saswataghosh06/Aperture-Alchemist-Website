@@ -8,10 +8,10 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   const socialLinks = [
-    { icon: Instagram, href: '#', label: 'Instagram' },
-    { icon: Twitter, href: '#', label: 'Twitter' },
+    { icon: Instagram, href: 'https://www.instagram.com/aperturealchemistofficial?igsh=MWdvdzRkMWN0ZTBseA== ', label: 'Instagram' },
+    { icon: Twitter, href: 'https://x.com/ApertureAlchem', label: 'Twitter' },
     { icon: Facebook, href: '#', label: 'Facebook' },
-    { icon: Linkedin, href: '#', label: 'LinkedIn' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/company/aperture-alchemist-snu/posts/?feedView=all', label: 'LinkedIn' },
   ];
 
   const quickLinks = [
@@ -60,7 +60,7 @@ const Footer: React.FC = () => {
               </div>
               <div className="flex items-center gap-3 text-white/80">
                 <Phone className="w-5 h-5" />
-                <span>+1 (555) 123-4567</span>
+                <span>+91 9123332011</span>
               </div>
             </div>
           </div>

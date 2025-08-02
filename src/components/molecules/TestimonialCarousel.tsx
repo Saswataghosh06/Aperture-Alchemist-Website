@@ -7,12 +7,12 @@ const TestimonialCarousel: React.FC = () => {
   
   const testimonials = [
     {
-      name: "Sarah Johnson",
-      role: "Marketing Director",
-      company: "TechFlow Inc",
-      content: "Aperture Alchemist transformed our brand story into a compelling visual narrative. Their attention to detail and creative vision exceeded all expectations. The final commercial boosted our engagement by 300%.",
-      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b55b?w=150&h=150&fit=crop&crop=face",
-      rating: 5
+      name: "Buroshiva Das Gupta",
+      role: "Founder & Advisor",
+      company: "Newscope",
+      content: "Aperture is an adventure for young budding photographers. It is led by  some passionate photographers like Sneha who make the art look simple and draws youngsters to the club like the Pied Pipers of Hamlyn ! Im really impressed by the huge numbers of its members and the passion with which they organise the masterclasses  and other enlightening programmes on photography. All the best for these little geniuses.",
+      avatar: "#",
+      rating: 4
     },
     {
       name: "Michael Chen",

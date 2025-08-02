@@ -1,17 +1,74 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import GradientText from '../components/atoms/GradientText';
 import GlassCard from '../components/atoms/GlassCard';
 import AnimatedButton from '../components/atoms/AnimatedButton';
 import { Mail, Phone, MapPin, Clock } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const Contact: React.FC = () => {
+  const { toast } = useToast();
+
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    service: '',
+    message: '',
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      await fetch(
+        'https://script.google.com/macros/s/AKfycbxAKXCGe7GBKW9YBj_zQxH3_uf-hUCFHb70qLqxZKu2XXTJW5fSYfAAOOb-L4ZrZyaOtw/exec',
+        {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      toast({
+        title: 'Thank you!',
+        description: 'Your message has been received. Our Team would get back to you soon.',
+      });
+
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        service: '',
+        message: '',
+      });
+    } catch (err) {
+      toast({
+        title: 'Network Error 😵',
+        description: 'Check your internet connection and try again.',
+        variant: 'destructive',
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen pt-32">
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <motion.div 
-            initial={{ opacity: 0, y: 40 }} 
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-left max-w-4xl"
           >
@@ -38,40 +95,65 @@ const Contact: React.FC = () => {
             >
               <GlassCard className="p-8">
                 <h2 className="text-3xl font-bold text-white mb-8">Send us a message</h2>
-                <form className="space-y-6">
+                <form className="space-y-6" onSubmit={handleSubmit}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <input 
-                      type="text" 
-                      placeholder="First Name" 
-                      className="w-full p-4 bg-white/5 border border-white/20 rounded-lg text-white placeholder-white/60 focus:border-primary focus:outline-none transition-colors" 
+                    <input
+                      type="text"
+                      name="firstName"
+                      value={formData.firstName}
+                      onChange={handleChange}
+                      placeholder="First Name"
+                      required
+                      className="input"
                     />
-                    <input 
-                      type="text" 
-                      placeholder="Last Name" 
-                      className="w-full p-4 bg-white/5 border border-white/20 rounded-lg text-white placeholder-white/60 focus:border-primary focus:outline-none transition-colors" 
+                    <input
+                      type="text"
+                      name="lastName"
+                      value={formData.lastName}
+                      onChange={handleChange}
+                      placeholder="Last Name"
+                      required
+                      className="input"
                     />
                   </div>
-                  <input 
-                    type="email" 
-                    placeholder="Email Address" 
-                    className="w-full p-4 bg-white/5 border border-white/20 rounded-lg text-white placeholder-white/60 focus:border-primary focus:outline-none transition-colors" 
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="Email Address"
+                    required
+                    className="input"
                   />
-                  <input 
-                    type="tel" 
-                    placeholder="Phone Number" 
-                    className="w-full p-4 bg-white/5 border border-white/20 rounded-lg text-white placeholder-white/60 focus:border-primary focus:outline-none transition-colors" 
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="Phone Number"
+                    className="input"
                   />
-                  <select className="w-full p-4 bg-white/5 border border-white/20 rounded-lg text-white focus:border-primary focus:outline-none transition-colors">
+                  <select
+                    name="service"
+                    value={formData.service}
+                    onChange={handleChange}
+                    required
+                    className="input"
+                  >
                     <option value="" className="bg-background text-white">Select Service</option>
                     <option value="video" className="bg-background text-white">Video Production</option>
                     <option value="photo" className="bg-background text-white">Photography</option>
                     <option value="marketing" className="bg-background text-white">Marketing</option>
                     <option value="other" className="bg-background text-white">Other</option>
                   </select>
-                  <textarea 
-                    rows={5} 
-                    placeholder="Tell us about your project..." 
-                    className="w-full p-4 bg-white/5 border border-white/20 rounded-lg text-white placeholder-white/60 focus:border-primary focus:outline-none resize-none transition-colors"
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    placeholder="Tell us about your project..."
+                    rows={5}
+                    required
+                    className="input resize-none"
                   ></textarea>
                   <AnimatedButton size="lg" className="w-full">
                     Send Message
@@ -80,7 +162,7 @@ const Contact: React.FC = () => {
               </GlassCard>
             </motion.div>
 
-            {/* Contact Info */}
+            {/* Contact Info Cards */}
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -94,8 +176,8 @@ const Contact: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold text-white mb-2">Email Us</h3>
-                    <p className="text-white/80">hello@aperturealchemist.com</p>
-                    <p className="text-white/80">projects@aperturealchemist.com</p>
+                    <p className="text-white/80">aperturealchemistofficial@gmail.com</p>
+                    <p className="text-white/80">aperturealchemistofficial+projects@gmail.com</p>
                   </div>
                 </div>
               </GlassCard>
@@ -107,8 +189,8 @@ const Contact: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold text-white mb-2">Call Us</h3>
-                    <p className="text-white/80">+1 (555) 123-4567</p>
-                    <p className="text-white/80">+1 (555) 987-6543</p>
+                    <p className="text-white/80">+91 9123332011</p>
+                    <p className="text-white/80">+91 9123332011</p>
                   </div>
                 </div>
               </GlassCard>
@@ -120,7 +202,11 @@ const Contact: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold text-white mb-2">Visit Us</h3>
-                    <p className="text-white/80">47 Adarsha Nagar<br />Kolkata-700105</p>
+                    <p className="text-white/80">
+                      47 Adarsha Nagar<br />
+                      P.O Chowbaga<br />
+                      Kolkata-700105
+                    </p>
                   </div>
                 </div>
               </GlassCard>
@@ -132,7 +218,10 @@ const Contact: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold text-white mb-2">Business Hours</h3>
-                    <p className="text-white/80">Mon - Fri: 9:00 AM - 6:00 PM<br />Sat: 10:00 AM - 4:00 PM</p>
+                    <p className="text-white/80">
+                      Mon - Fri: 9:00 AM - 6:00 PM<br />
+                      Sat: 10:00 AM - 4:00 PM
+                    </p>
                   </div>
                 </div>
               </GlassCard>

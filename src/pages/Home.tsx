@@ -220,19 +220,19 @@ const Home: React.FC = () => {
               className="grid grid-cols-2 gap-8"
             >
               <div className="text-center">
-                <div className="text-6xl md:text-8xl font-bold text-white/20 mb-2">15+</div>
+                <div className="text-6xl md:text-8xl font-bold text-white/20 mb-2">2+</div>
                 <p className="text-white font-semibold text-lg">YEARS OF EXPERIENCE</p>
               </div>
               <div className="text-center">
-                <div className="text-6xl md:text-8xl font-bold text-white/20 mb-2">200+</div>
+                <div className="text-6xl md:text-8xl font-bold text-white/20 mb-2">10+</div>
                 <p className="text-white font-semibold text-lg">REPEATED CLIENTS</p>
               </div>
               <div className="text-center">
-                <div className="text-6xl md:text-8xl font-bold text-white/20 mb-2">470+</div>
+                <div className="text-6xl md:text-8xl font-bold text-white/20 mb-2">25+</div>
                 <p className="text-white font-semibold text-lg">COMPLETED PROJECTS</p>
               </div>
               <div className="text-center">
-                <div className="text-6xl md:text-8xl font-bold text-white/20 mb-2">330+</div>
+                <div className="text-6xl md:text-8xl font-bold text-white/20 mb-2">11+</div>
                 <p className="text-white font-semibold text-lg">HAPPY CLIENTS</p>
               </div>
             </motion.div>
