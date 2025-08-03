@@ -44,8 +44,13 @@ const Projects: React.FC = () => {
   }, []);
 
   const filteredProjects = activeFilter === 'All'
-    ? projects
-    : projects.filter(project => project.category === activeFilter);
+  ? projects
+  : projects.filter(project =>
+      project.category
+        ?.split(',')
+        .map((c: string) => c.trim().toLowerCase())
+        .includes(activeFilter.toLowerCase())
+    );
 
   return (
     <div className="min-h-screen pt-32">
