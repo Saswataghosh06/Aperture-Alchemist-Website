@@ -43,15 +43,13 @@ const Projects: React.FC = () => {
     fetchProjects();
   }, []);
 
-  const filteredProjects = activeFilter === 'All'
+ const filteredProjects = activeFilter === 'All'
   ? projects
-  : projects.filter(project =>
-      project.category
-        ?.split(',')
-        .map((c: string) => c.trim().toLowerCase())
-        .includes(activeFilter.toLowerCase())
-    );
-
+  : projects.filter(project => {
+      const categories = project.category?.split(',').map((c: string) => c.trim()) || [];
+      return categories.includes(activeFilter);
+    });
+    
   return (
     <div className="min-h-screen pt-32">
       {/* Header */}
