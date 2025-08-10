@@ -32,9 +32,9 @@ const Footer: React.FC = () => {
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-6">
               <img 
-                src="/lovable-uploads/7ef56793-ba99-4c65-a8e8-e9a32326a17d.png"
+                src={`${import.meta.env.BASE_URL}logo.webp`}
                 alt="Aperture Alchemist"
-                className="h-12 w-auto"
+                className="h-24 w-auto"
               />
             </div>
             <p className="text-white/80 mb-6 max-w-md">

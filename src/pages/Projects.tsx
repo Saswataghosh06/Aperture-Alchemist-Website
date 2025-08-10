@@ -1,12 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import GradientText from '../components/atoms/GradientText';
 import ProjectCard from '../components/atoms/ProjectCard';
 import FilterTab from '../components/atoms/FilterTab';
-import TestimonialCarousel from '../components/molecules/TestimonialCarousel';
-import FAQ from '../components/molecules/FAQ';
 import AnimatedButton from '../components/atoms/AnimatedButton';
-import { supabase } from '@/lib/supabaseClient'; // ✅ Supabase client
+import { supabase } from '@/lib/supabaseClient';
+
+const getThumbnailFromLink = (link: string, fallbackImage?: string) => {
+  if (!link) return fallbackImage || '/placeholder.jpg';
+
+  const ytMatch = link.match(/(?:youtube\.com\/.*[?&]v=|youtu\.be\/)([^&?/]+)/i);
+  if (ytMatch?.[1]) return `https://img.youtube.com/vi/${ytMatch[1]}/maxresdefault.jpg`;
+
+  const driveMatch = link.match(/drive\.google\.com\/file\/d\/([^/]+)/i);
+  if (driveMatch?.[1]) return `https://drive.google.com/thumbnail?id=${driveMatch[1]}&sz=w1000`;
+
+  if (link.includes('instagram.com')) return '/instagram-placeholder.jpg';
+
+  return fallbackImage || '/placeholder.jpg';
+};
 
 const Projects: React.FC = () => {
   const [projects, setProjects] = useState<any[]>([]);
@@ -14,20 +26,9 @@ const Projects: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState('All');
 
   const filters = [
-    'All',
-    'Animation',
-    'Commercials', 
-    'Corporate',
-    'Documentary',
-    'Educational',
-    'Entertainment',
-    'Event',
-    'Fashion',
-    'Interview',
-    'Lifestyle',
-    'Product Video',
-    'Real Estate',
-    'Social Media'
+    'All', 'Animation', 'Commercials', 'Corporate', 'Documentary',
+    'Educational', 'Entertainment', 'Event', 'Fashion', 'Interview',
+    'Lifestyle', 'Product Video', 'Real Estate', 'Social Media', 'News Edits', 'Motion Garphics'
   ];
 
   useEffect(() => {
@@ -36,20 +37,25 @@ const Projects: React.FC = () => {
       if (error) {
         console.error('Error fetching projects:', error.message);
       } else {
-        setProjects(data);
+        setProjects(data || []);
       }
       setLoading(false);
     };
     fetchProjects();
   }, []);
 
- const filteredProjects = activeFilter === 'All'
-  ? projects
-  : projects.filter(project => {
-      const categories = project.category?.split(',').map((c: string) => c.trim()) || [];
-      return categories.includes(activeFilter);
+  const filteredProjects = useMemo(() => {
+    if (activeFilter === 'All') return projects;
+    return projects.filter(project => {
+      const categories = Array.isArray(project.categories)
+        ? project.categories
+        : typeof project.category === 'string'
+        ? project.category.split(',').map(c => c.trim())
+        : [];
+      return categories.some(cat => cat.toLowerCase() === activeFilter.toLowerCase());
     });
-    
+  }, [projects, activeFilter]);
+
   return (
     <div className="min-h-screen pt-32">
       {/* Header */}
@@ -57,7 +63,8 @@ const Projects: React.FC = () => {
         <div className="container mx-auto px-4">
           <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} className="max-w-6xl">
             <h1 className="text-6xl md:text-8xl font-bold mb-8">
-              <GradientText variant="fade">Our</GradientText><br />
+              <GradientText variant="fade">Our</GradientText>
+              <br />
               <span className="text-white">Projects</span>
             </h1>
             <p className="text-white text-xl md:text-2xl font-light max-w-4xl">
@@ -74,9 +81,9 @@ const Projects: React.FC = () => {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="flex flex-wrap gap-4 justify-center"
+            className="flex flex-wrap gap-4 justify-center overflow-x-auto"
           >
-            {filters.map((filter) => (
+            {filters.map(filter => (
               <FilterTab
                 key={filter}
                 label={filter}
@@ -114,8 +121,8 @@ const Projects: React.FC = () => {
                       <ProjectCard
                         title={project.title}
                         brand={project.brand}
-                        category={project.category}
-                        image={project.image}
+                        category={project.categories || project.category}
+                        image={getThumbnailFromLink(project.video, project.image)}
                         video={project.video}
                       />
                     </motion.div>
@@ -123,7 +130,6 @@ const Projects: React.FC = () => {
                 </motion.div>
               </AnimatePresence>
 
-              {/* Empty State */}
               {filteredProjects.length === 0 && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
                   <h3 className="text-2xl font-semibold text-white mb-4">
@@ -141,9 +147,6 @@ const Projects: React.FC = () => {
           )}
         </div>
       </section>
-
-      {/* Sections Below (unchanged) */}
-      {/* Stats, Testimonials, FAQ, CTA */}
     </div>
   );
 };

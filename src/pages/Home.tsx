@@ -194,7 +194,7 @@ const Home: React.FC = () => {
               </h2>
               <div className="space-y-6 text-white/80 text-lg leading-relaxed mb-12">
                 <p>
-                  <span className="text-white">Established in 2015, we have dedicated ourselves to</span> the 
+                  <span className="text-white">Established in 2023, we have dedicated ourselves to</span> the 
                   art of visual storytelling. Our journey has been fueled by creativity, innovation, and an unwavering commitment 
                   to <span className="text-white font-semibold">excellence in video production.</span>
                 </p>
