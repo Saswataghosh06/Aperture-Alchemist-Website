@@ -71,14 +71,14 @@ const Services: React.FC = () => {
           >
             <GlassCard className="text-center max-w-5xl mx-auto p-12">
               <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white">
-                Rent, Shoot, Wow: Our Studio Awaits!
+                Rent, Shoot, Wow: Our Team Awaits!
               </h2>
               <p className="text-lg md:text-xl text-white/80 mb-8 max-w-3xl mx-auto">
                 We've got the coolest tech and all the resources to bring your ideas to life. 
-                Book a tour and come be a part of the excitement – we're eager to show you around with a smile!
+                Book a call and come be a part of the excitement – we're eager to show you around with a smile!
               </p>
               <AnimatedButton to="/contact" size="lg">
-                Book a Tour
+                Book a Call
               </AnimatedButton>
             </GlassCard>
           </motion.div>
