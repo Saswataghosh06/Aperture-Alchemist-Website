@@ -28,7 +28,7 @@ const Projects: React.FC = () => {
   const filters = [
     'All', 'Animation', 'Commercials', 'Corporate', 'Documentary',
     'Educational', 'Entertainment', 'Event', 'Fashion', 'Interview',
-    'Lifestyle', 'Product Video', 'Real Estate', 'Social Media', 'News Edits', 'Motion Garphics'
+    'Lifestyle', 'Product Video', 'Real Estate', 'Social Media', 'News Edit', 'Motion Garphics', 'Wedding'
   ];
 
   useEffect(() => {
