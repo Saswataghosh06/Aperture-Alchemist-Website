@@ -1,28 +1,36 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '@/lib/utils';
-import { X } from 'lucide-react';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
+import { X } from "lucide-react";
 
 interface AlbumCardProps {
   title: string;
   subtitle: string;
   images: string[];
-  className?: string;
+  driveLinks: string[];
   delay?: number;
+  className?: string;
+  thumbnail: string;
 }
 
 const AlbumCard: React.FC<AlbumCardProps> = ({
   title,
   subtitle,
-  images,
+  images = [],
+  driveLinks = [],
   className,
   delay = 0,
+  thumbnail,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const fallbackImage = 'https://via.placeholder.com/600x400.png?text=No+Image';
-  const validImages = images?.filter(Boolean) ?? [];
+  const fallbackImage = "/placeholder-image.jpg";
+
+  // Directly use the thumbnail provided by Albums.tsx
+  const thumbSrc = thumbnail || fallbackImage;
+
+  const previewImages = [...(images || []), ...(driveLinks || [])];
 
   return (
     <>
@@ -32,8 +40,8 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay }}
         className={cn(
-          'glass-card-hover rounded-xl overflow-hidden cursor-pointer group',
-          'aspect-[4/3] relative',
+          "glass-card-hover rounded-xl overflow-hidden cursor-pointer group",
+          "aspect-[4/3] relative",
           className
         )}
         onMouseEnter={() => setIsHovered(true)}
@@ -41,24 +49,26 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
         whileHover={{ scale: 1.02 }}
         onClick={() => setIsModalOpen(true)}
       >
-        {/* Main Image */}
         <div className="relative w-full h-full overflow-hidden">
           <img
-            src={validImages[0] || fallbackImage}
+            src={thumbSrc}
             alt={title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = fallbackImage;
+            }}
+            className="w-full h-64 object-cover rounded-lg"
           />
 
           {/* Hover Grid Preview */}
           <AnimatePresence>
-            {isHovered && validImages.length > 1 && (
+            {isHovered && previewImages.length > 1 && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 className="absolute inset-0 grid grid-cols-2 gap-1 p-2"
               >
-                {validImages.slice(1, 5).map((img, index) => (
+                {previewImages.slice(1, 5).map((img, index) => (
                   <motion.div
                     key={index}
                     initial={{ scale: 0, opacity: 0 }}
@@ -69,6 +79,10 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
                     <img
                       src={img || fallbackImage}
                       alt={`${title} ${index + 1}`}
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src =
+                          fallbackImage;
+                      }}
                       className="w-full h-full object-cover"
                     />
                   </motion.div>
@@ -90,10 +104,11 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
           </div>
 
           {/* Image Count */}
-          {validImages.length > 0 && (
+          {previewImages.length > 0 && (
             <div className="absolute top-3 right-3">
               <span className="glass-card px-3 py-1 text-xs font-medium text-white rounded-full">
-                {validImages.length} photo{validImages.length > 1 ? 's' : ''}
+                {previewImages.length} photo
+                {previewImages.length > 1 ? "s" : ""}
               </span>
             </div>
           )}
@@ -122,18 +137,25 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
             <div className="max-w-6xl w-full text-center">
               <h2 className="text-3xl font-bold text-white mb-2">{title}</h2>
               <p className="text-white/80 mb-6">{subtitle}</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {validImages.map((img, index) => (
-                  <motion.img
-                    key={index}
-                    src={img}
-                    alt={`Album Image ${index + 1}`}
-                    className="rounded-lg object-cover w-full h-64"
-                    whileHover={{ scale: 1.02 }}
-                    transition={{ duration: 0.3 }}
-                  />
-                ))}
-              </div>
+
+              {previewImages.length > 0 && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  {previewImages.map((img, index) => (
+                    <motion.img
+                      key={index}
+                      src={img}
+                      alt={`Album Image ${index + 1}`}
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src =
+                          fallbackImage;
+                      }}
+                      className="rounded-lg object-cover w-full h-64"
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           </motion.div>
         )}

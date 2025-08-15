@@ -5,10 +5,11 @@ import { Menu, X } from "lucide-react";
 import AnimatedButton from "../atoms/AnimatedButton";
 
 const Navbar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // Mobile menu toggle
+  const [isScrolled, setIsScrolled] = useState(false); // Scroll effect
   const location = useLocation();
 
+  // 🔹 Detect scroll position for sticky style
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -17,31 +18,36 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // 🔹 Close mobile menu on route change
   useEffect(() => {
     setIsOpen(false);
   }, [location]);
 
+  // 🔹 Navigation links
   const navItems = [
     { path: "/", label: "Home" },
     { path: "/projects", label: "Projects" },
     { path: "/albums", label: "Albums" },
+    { path: "/designs", label: "Designs" }, // Added Designs
     { path: "/about", label: "About" },
     { path: "/services", label: "Services" },
   ];
 
   return (
     <>
-      {/* Navbar */}
+      {/* ================= NAVBAR CONTAINER ================= */}
       <motion.header
         initial={{ y: -100 }}
         animate={{ y: 0 }}
+        transition={{ duration: 0.4 }}
         className={`fixed left-0 w-full z-50 transition-all duration-300 ${
           isScrolled ? "top-4" : "top-6"
         }`}
       >
         <div className="mx-auto w-[95%] max-w-6xl">
           <nav className="glass-card rounded-full px-6 py-3 flex items-center justify-between relative shadow-2xl backdrop-blur-xl border border-white/20 w-full">
-            {/* Logo */}
+            
+            {/* ================= LOGO ================= */}
             <NavLink to="/" className="flex items-center gap-3 flex-shrink-0">
               <img
                 src={`${import.meta.env.BASE_URL}logo.webp`}
@@ -51,7 +57,7 @@ const Navbar: React.FC = () => {
               />
             </NavLink>
 
-            {/* Desktop Navigation */}
+            {/* ================= DESKTOP NAV LINKS ================= */}
             <div className="hidden md:flex items-center gap-8 absolute left-1/2 transform -translate-x-1/2">
               {navItems.map((item) => (
                 <NavLink
@@ -68,14 +74,14 @@ const Navbar: React.FC = () => {
               ))}
             </div>
 
-            {/* Desktop CTA */}
+            {/* ================= DESKTOP CTA ================= */}
             <div className="hidden md:block flex-shrink-0">
-              <AnimatedButton to="/contact" size="sm">
+              <AnimatedButton href="/contact" size="sm">
                 Let's Talk
               </AnimatedButton>
             </div>
 
-            {/* Mobile Menu Toggle */}
+            {/* ================= MOBILE MENU BUTTON ================= */}
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="md:hidden text-white p-2 flex-shrink-0"
@@ -87,7 +93,7 @@ const Navbar: React.FC = () => {
         </div>
       </motion.header>
 
-      {/* Mobile Menu */}
+      {/* ================= MOBILE MENU OVERLAY ================= */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -117,14 +123,14 @@ const Navbar: React.FC = () => {
                 </motion.div>
               ))}
 
-              {/* Mobile CTA */}
+              {/* ================= MOBILE CTA BUTTON ================= */}
               <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: navItems.length * 0.1 }}
                 className="mt-8"
               >
-                <AnimatedButton to="/contact" size="lg">
+                <AnimatedButton href="/contact" size="lg">
                   Let's Talk
                 </AnimatedButton>
               </motion.div>

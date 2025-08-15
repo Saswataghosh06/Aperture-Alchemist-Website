@@ -7,28 +7,33 @@ import AnimatedButton from '../atoms/AnimatedButton';
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
+  // 🔹 Social media links
   const socialLinks = [
-    { icon: Instagram, href: 'https://www.instagram.com/aperturealchemistofficial?igsh=MWdvdzRkMWN0ZTBseA== ', label: 'Instagram' },
+    { icon: Instagram, href: 'https://www.instagram.com/aperturealchemistofficial?igsh=MWdvdzRkMWN0ZTBseA==', label: 'Instagram' },
     { icon: Twitter, href: 'https://x.com/ApertureAlchem', label: 'Twitter' },
     { icon: Facebook, href: '#', label: 'Facebook' },
     { icon: Linkedin, href: 'https://www.linkedin.com/company/aperture-alchemist-snu/posts/?feedView=all', label: 'LinkedIn' },
   ];
 
+  // 🔹 Quick navigation links
   const quickLinks = [
     { path: '/', label: 'Home' },
     { path: '/about', label: 'About' },
     { path: '/services', label: 'Services' },
     { path: '/projects', label: 'Projects' },
     { path: '/albums', label: 'Albums' },
+    { path: '/designs', label: 'Designs' }, // ✅ Added Designs here
     { path: '/contact', label: 'Contact' },
   ];
 
   return (
     <footer className="relative bg-background border-t border-white/10">
       <div className="container mx-auto px-4 py-16">
-        {/* Main Footer Content */}
+        
+        {/* ================= MAIN FOOTER CONTENT ================= */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-          {/* Brand Section */}
+          
+          {/* ================= BRAND INFO ================= */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-6">
               <img 
@@ -42,12 +47,12 @@ const Footer: React.FC = () => {
               that captivate audiences and drive results.
             </p>
             
-            {/* CTA Section */}
+            {/* CTA Box */}
             <div className="glass-card rounded-xl p-6 mb-6">
               <h3 className="text-xl font-semibold text-white mb-3">
                 Ready to create something amazing?
               </h3>
-              <AnimatedButton to="/contact" className="w-full sm:w-auto">
+              <AnimatedButton href="/contact" className="w-full sm:w-auto">
                 Let's Collaborate
               </AnimatedButton>
             </div>
@@ -65,7 +70,7 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
+          {/* ================= QUICK LINKS ================= */}
           <div>
             <h3 className="text-xl font-semibold text-white mb-6">Quick Links</h3>
             <ul className="space-y-3">
@@ -82,7 +87,7 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Services */}
+          {/* ================= SERVICES ================= */}
           <div>
             <h3 className="text-xl font-semibold text-white mb-6">Services</h3>
             <ul className="space-y-3 text-white/80">
@@ -96,7 +101,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Social Links */}
+        {/* ================= SOCIAL LINKS ================= */}
         <motion.div 
           className="flex flex-wrap items-center justify-center gap-6 py-8 border-y border-white/10"
           initial={{ opacity: 0 }}
@@ -107,6 +112,8 @@ const Footer: React.FC = () => {
             <motion.a
               key={social.label}
               href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
               className="glass-card-hover p-3 rounded-full text-white/80 hover:text-primary"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
@@ -120,7 +127,7 @@ const Footer: React.FC = () => {
           ))}
         </motion.div>
 
-        {/* Copyright */}
+        {/* ================= COPYRIGHT ================= */}
         <div className="text-center pt-8">
           <p className="text-white/60">
             © {currentYear} Aperture Alchemist. All rights reserved.
