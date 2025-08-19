@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
@@ -24,13 +24,21 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const fallbackImage = "/placeholder-image.jpg";
-
-  // Directly use the thumbnail provided by Albums.tsx
-  const thumbSrc = thumbnail || fallbackImage;
-
   const previewImages = [...(images || []), ...(driveLinks || [])];
+  const thumbSrc = thumbnail || previewImages[0] || fallbackImage;
+
+  // Auto-cycle images on hover
+  useEffect(() => {
+    if (isHovered && previewImages.length > 1) {
+      const interval = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % previewImages.length);
+      }, 1500); // change every 1.5s
+      return () => clearInterval(interval);
+    }
+  }, [isHovered, previewImages.length]);
 
   return (
     <>
@@ -40,89 +48,68 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay }}
         className={cn(
-          "glass-card-hover rounded-xl overflow-hidden cursor-pointer group",
-          "aspect-[4/3] relative",
+          "glass-card-hover rounded-2xl overflow-hidden cursor-pointer group",
+          "relative aspect-[4/3]",
           className
         )}
         onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        onMouseLeave={() => {
+          setIsHovered(false);
+          setCurrentIndex(0);
+        }}
         whileHover={{ scale: 1.02 }}
         onClick={() => setIsModalOpen(true)}
       >
-        <div className="relative w-full h-full overflow-hidden">
-          <img
-            src={thumbSrc}
-            alt={title}
-            onError={(e) => {
-              (e.currentTarget as HTMLImageElement).src = fallbackImage;
-            }}
-            className="w-full h-64 object-cover rounded-lg"
-          />
-
-          {/* Hover Grid Preview */}
-          <AnimatePresence>
-            {isHovered && previewImages.length > 1 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="absolute inset-0 grid grid-cols-2 gap-1 p-2"
-              >
-                {previewImages.slice(1, 5).map((img, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ delay: index * 0.1, duration: 0.3 }}
-                    className="rounded-lg overflow-hidden"
-                  >
-                    <img
-                      src={img || fallbackImage}
-                      alt={`${title} ${index + 1}`}
-                      onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).src =
-                          fallbackImage;
-                      }}
-                      className="w-full h-full object-cover"
-                    />
-                  </motion.div>
-                ))}
-              </motion.div>
-            )}
+        {/* Slideshow Images */}
+        <div className="relative w-full h-full">
+          <AnimatePresence mode="wait">
+            <motion.img
+              key={currentIndex}
+              src={previewImages[currentIndex] || thumbSrc}
+              alt={`${title} preview`}
+              onError={(e) =>
+                ((e.currentTarget as HTMLImageElement).src = fallbackImage)
+              }
+              className="w-full h-64 md:h-full object-cover rounded-2xl absolute inset-0"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.6 }}
+            />
           </AnimatePresence>
-
-          {/* Title Overlay */}
-          <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-            <motion.div
-              initial={false}
-              animate={{ y: isHovered ? -10 : 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <h3 className="text-xl font-semibold text-white mb-1">{title}</h3>
-              <p className="text-white/80 text-sm">{subtitle}</p>
-            </motion.div>
-          </div>
-
-          {/* Image Count */}
-          {previewImages.length > 0 && (
-            <div className="absolute top-3 right-3">
-              <span className="glass-card px-3 py-1 text-xs font-medium text-white rounded-full">
-                {previewImages.length} photo
-                {previewImages.length > 1 ? "s" : ""}
-              </span>
-            </div>
-          )}
         </div>
+
+        {/* Title Overlay */}
+        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+          <motion.div
+            initial={false}
+            animate={{ y: isHovered ? -10 : 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <h3 className="text-xl font-semibold text-white mb-1">{title}</h3>
+            <p className="text-white/80 text-sm">{subtitle}</p>
+          </motion.div>
+        </div>
+
+        {/* Image Count Badge */}
+        {previewImages.length > 0 && (
+          <div className="absolute top-3 right-3">
+            <span className="glass-card px-3 py-1 text-xs font-medium text-white rounded-full">
+              {previewImages.length} photo
+              {previewImages.length > 1 ? "s" : ""}
+            </span>
+          </div>
+        )}
       </motion.div>
 
       {/* Full-Screen Modal */}
       <AnimatePresence>
         {isModalOpen && (
           <motion.div
-            className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xl flex flex-col items-center justify-center p-6"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xl flex flex-col items-center justify-center p-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
             {/* Close Button */}
@@ -145,12 +132,12 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
                       key={index}
                       src={img}
                       alt={`Album Image ${index + 1}`}
-                      onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).src =
-                          fallbackImage;
-                      }}
+                      onError={(e) =>
+                        ((e.currentTarget as HTMLImageElement).src =
+                          fallbackImage)
+                      }
                       className="rounded-lg object-cover w-full h-64"
-                      whileHover={{ scale: 1.02 }}
+                      whileHover={{ scale: 1.03 }}
                       transition={{ duration: 0.3 }}
                     />
                   ))}
